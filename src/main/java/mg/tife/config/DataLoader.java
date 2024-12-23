@@ -41,7 +41,7 @@ public class DataLoader {
         return args -> {
         	System.out.println("initialiser**************");
            // if (vectorStore.similaritySearch("qui est abraham").isEmpty()) {
-        	initStore();
+        	//initStore();
            //}
         };
     }
@@ -68,7 +68,7 @@ public class DataLoader {
         
         int batchSize = 1000;
         int totalSize = versesDoc.size();
-        int latestSuccess = 9000;
+        int latestSuccess = 30975;
         
 
         for (int i = latestSuccess; i < totalSize; i += batchSize) {
