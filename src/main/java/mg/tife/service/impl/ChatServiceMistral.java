@@ -62,13 +62,26 @@ public class ChatServiceMistral implements ChatService {
 
 	@Override
 	public String askingBible(String msg) {
-		SearchRequest request = SearchRequest.query(msg).withTopK(4);
+		// Recherche des documents similaires
+		SearchRequest request = SearchRequest.query(msg).withTopK(10);
 		List<Document> documents = this.vectorStore.similaritySearch(request);
+
+		// Génération du contexte à partir des documents récupérés
+		List<String> context = documents.stream()
+		                                .map(Document::getContent) // Méthode référence pour plus de lisibilité
+		                                .toList();
+		context.forEach(System.out::println); // Affichage direct pour débogage
+
+		// Création du prompt à partir du modèle
 		PromptTemplate promptTemplate = new PromptTemplate(promptResourceBible);
-        List<String> context = documents.stream().map(d-> d.getContent()).toList();
-        context.stream().forEach(System.out::println);
-        Prompt prompt = promptTemplate.create(Map.of("context",context,"question",msg));
-        return chatClient.prompt(prompt).call().content();
+		Prompt prompt = promptTemplate.create(Map.of(
+		    "context", String.join("\n", context), // Concaténation pour structurer le contexte
+		    "question", msg
+		));
+
+		// Appel au client AI pour obtenir la réponse
+		return chatClient.prompt(prompt).call().content();
+
 	}
 
 
