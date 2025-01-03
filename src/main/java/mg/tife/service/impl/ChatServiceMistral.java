@@ -63,7 +63,7 @@ public class ChatServiceMistral implements ChatService {
 	@Override
 	public String askingBible(String msg) {
 		// Recherche des documents similaires
-		SearchRequest request = SearchRequest.query(msg).withTopK(10);
+		SearchRequest request = SearchRequest.query(msg).withTopK(5);
 		List<Document> documents = this.vectorStore.similaritySearch(request);
 
 		// Génération du contexte à partir des documents récupérés

@@ -27,6 +27,8 @@ public class DataLoader {
     
     private final ObjectMapper objectMapper;
     
+    
+    
     VectorStore vectorStore;
 
 	public DataLoader(VectorStore vectorStore,ObjectMapper objMap) {
