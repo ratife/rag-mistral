@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import lombok.AllArgsConstructor;
 import mg.tife.service.ChatBibleService;
 
 @Primary
@@ -30,6 +28,7 @@ public class ChatBibleLowLevelCodeServiceMistral implements ChatBibleService {
 	
 	public ChatBibleLowLevelCodeServiceMistral(ChatClient.Builder builder,VectorStore vectorStore) {
 		this.chatClient = builder.build();
+		this.vectorStore = vectorStore;
 	}
 
 	@Override
