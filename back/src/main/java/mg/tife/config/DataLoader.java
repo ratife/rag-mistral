@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.ai.document.Document;
-import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
@@ -26,8 +25,6 @@ public class DataLoader {
     private Resource bibleJSON;
     
     private final ObjectMapper objectMapper;
-    
-    
     
     VectorStore vectorStore;
 
@@ -55,7 +52,7 @@ public class DataLoader {
         
         int chap = 1;
         int vrs = 1;
-        List<Document> versesDoc = new ArrayList<Document>();
+        List<Document> versesDoc = new ArrayList<>();
         System.out.println("============== reading ....");
         for (Map<String, Object> book : bibleBooks) {
             List<List<String>> chapters = (List<List<String>>) book.get("chapters");
@@ -68,7 +65,7 @@ public class DataLoader {
             }
         }
         
-        int batchSize = 1000;
+        int batchSize = 0;
         int totalSize = versesDoc.size();
         int latestSuccess = 30975;
         
@@ -82,54 +79,5 @@ public class DataLoader {
         }
         
         System.out.println("Completed ");
-        
-        
-    }
-    
-    public void initStoreTest() throws IOException {
-    	List <Document> documents = List.of(
-    		    new Document("Spring AI rocks!! Spring AI rocks!! Spring AI rocks!! Spring AI rocks!! Spring AI rocks!!", Map.of("meta1", "meta1")),
-    		    new Document("The World is Big and Salvation Lurks Around the Corner"),
-    		    new Document("You walk forward facing the past and you turn back toward the future.", Map.of("meta2", "meta2")));
-
-    		// Add the documents to Redis
-    		vectorStore.add(documents);
-
-    		SearchRequest request = SearchRequest.query("Spring").withTopK(5);
-    		
-    		List<Document> results = this.vectorStore.similaritySearch(request);
-        
-    		System.out.println(results);
-        
-    		 System.out.println("Completed ");
-    }
-    
-    public void initStoreTest2() throws IOException {
-    	System.out.println("============== loading ....");
-    	InputStream inputStream = bibleJSON.getInputStream();
-        List<Map<String, Object>> bibleBooks = objectMapper.readValue(inputStream, new TypeReference<List<Map<String, Object>>>() {});
-        
-        int chap = 1;
-        int vrs = 1;
-        List<Document> versesDoc = new ArrayList<Document>();
-        System.out.println("============== reading ....");
-        for (Map<String, Object> book : bibleBooks) {
-            List<List<String>> chapters = (List<List<String>>) book.get("chapters");
-            chap = 1;
-            for (List<String> verses : chapters) {
-            	vrs = 1;
-            	for(String verse : verses) {
-            		versesDoc.add(new Document(verse,Map.of("abbrev",book.get("abbrev"),"name",book.get("name"),"chapiter",chap++,"verse",vrs++)));
-            	}
-            }
-        }
-        
-        
-        List<Document> subList = versesDoc.subList(0, 1000);
-        vectorStore.add(subList);
-        
-        System.out.println("Completed ");
-        
-        
     }
 }
